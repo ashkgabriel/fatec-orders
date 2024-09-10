@@ -1,61 +1,75 @@
-
-import CustomTable from "@/components/UI/organisms/CustomTable"
-import Layout from "@/components/UI/organisms/Layout"
-import { Box } from "@mui/material"
+"use client";
+import CustomTable from "@/components/UI/organisms/CustomTable";
+import Layout from "@/components/UI/organisms/Layout";
+import { env } from "@/config/env";
+import { Box } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const Products = () => {
-    
-const rows = [
-{  
-    id: 1,
-    name: "Cupcake",
-    calories: 12.6,
-    fat: 3.67,
-    carbs: 23,
-    protein: 12.4
-}
-];
 
-const headCells = [
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: true,
-    label: 'Dessert (100g serving)',
-  },
-  {
-    id: 'calories',
-    numeric: true,
-    disablePadding: false,
-    label: 'Calories',
-  },
-  {
-    id: 'fat',
-    numeric: true,
-    disablePadding: false,
-    label: 'Fat (g)',
-  },
-  {
-    id: 'carbs',
-    numeric: true,
-    disablePadding: false,
-    label: 'Carbs (g)',
-  },
-  {
-    id: 'protein',
-    numeric: true,
-    disablePadding: false,
-    label: 'Protein (g)',
-  },
-];
+  const [rows, setRows] = useState([])
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await axios.get(
+        `${env.apiBaseUrl}/produto`
+      );
 
-    return(
-        <Layout name="products">
-            <Box>
-                <CustomTable/>
-            </Box>
-        </Layout>
-    )
-}
+      const products = response.data.produtos.map((product: any) => ({
+        id: product.id,
+        description: product.descricao,
+        brand: product.marca,
+        value: product.valor,
+        weight: product.peso_gramas,
+        flavor: product.sabor
+      }));
 
-export default Products
+      setRows(products)
+    };
+    fetchProducts();
+  }, []);
+  
+  const headCells = [
+    {
+      id: "description",
+      numeric: false,
+      disablePadding: false,
+      label: "Descrição",
+    },
+    {
+      id: "brand",
+      numeric: false,
+      disablePadding: false,
+      label: "Marca",
+    },
+    {
+      id: "value",
+      numeric: true,
+      disablePadding: false,
+      label: "Valor",
+    },
+    {
+      id: "weight",
+      numeric: true,
+      disablePadding: false,
+      label: "Peso",
+    },
+    {
+      id: "flavor",
+      numeric: false,
+      disablePadding: false,
+      label: "Sabor",
+    },
+  ];
+
+  return (
+    <Layout>
+      <Box>
+        <CustomTable rows={rows} headCells={headCells} />
+      </Box>
+    </Layout>
+  );
+};
+
+export default Products;

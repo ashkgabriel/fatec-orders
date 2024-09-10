@@ -1,5 +1,4 @@
 "use client";
-
 import Box from "@mui/material/Box";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Paper from "@mui/material/Paper";
@@ -17,33 +16,7 @@ import Typography from "@mui/material/Typography";
 import { visuallyHidden } from "@mui/utils";
 import * as React from "react";
 
-interface Data {
-  id: number;
-  calories: number;
-  carbs: number;
-  fat: number;
-  name: string;
-  protein: number;
-}
-
-function createData(
-  id: number,
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-): Data {
-  return {
-    id,
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  };
-}
-
+/* TableBody > TableRow */
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -56,6 +29,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 
 type Order = "asc" | "desc";
 
+/* TableBody > TableRow */
 function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key
@@ -68,19 +42,9 @@ function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-  numeric: boolean;
-}
-
 interface EnhancedTableProps {
   numSelected: number;
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
@@ -90,8 +54,8 @@ interface EnhancedTableProps {
 interface EnhancedTableToolbarProps {
   numSelected: number;
 }
+
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
   return (
     <Toolbar
       sx={[
@@ -107,7 +71,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         id="tableTitle"
         component="div"
       >
-        Lista de Produtos
+        Nutrition
       </Typography>
     </Toolbar>
   );
@@ -120,65 +84,61 @@ interface CustomTableProps {
 
 export default function CustomTable({ rows, headCells }: CustomTableProps) {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
+  const [orderBy, setOrderBy] = React.useState<string>("");
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
-  const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
+  function EnhancedTableHead(props: EnhancedTableProps) {
+    const { order, orderBy, onRequestSort } = props;
+    const createSortHandler =
+      (property: string) => (event: React.MouseEvent<unknown>) => {
+        onRequestSort(event, property);
+      };
 
-  return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
+    return (
+      <TableHead>
+        <TableRow>
+          {headCells.map((headCell: any) => (
+            <TableCell
+              key={headCell.id}
+              align={headCell.numeric ? "right" : "left"}
+              padding={headCell.disablePadding ? "none" : "normal"}
+              sortDirection={orderBy === headCell.id ? order : false}
             >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === "desc"
+                      ? "sorted descending"
+                      : "sorted ascending"}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+    );
+  }
 
+  /* EnhancedTableHead */
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: string
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
+  /* EnhancedTableHead */
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelected = rows.map((n) => n.id);
@@ -188,6 +148,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     setSelected([]);
   };
 
+  /* TableBody > TableRow */
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: readonly number[] = [];
@@ -207,10 +168,12 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     setSelected(newSelected);
   };
 
+  /* TablePagination */
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
+  /* TablePagination */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -218,6 +181,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     setPage(0);
   };
 
+  /* FormControlLabel */
   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDense(event.target.checked);
   };
@@ -233,7 +197,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
       [...rows]
         .sort(getComparator(order, orderBy))
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage]
+    [order, orderBy, page, rowsPerPage, rows]
   );
 
   return (
@@ -270,18 +234,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                   >
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                    >
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+                    {
+                      headCells.map((headCell: any) => {
+                        return (
+                          <TableCell key={headCell.id} align={headCell.numeric ? "right" : "left"}>
+                            {row[headCell.id]}
+                          </TableCell>
+                        );
+                      })
+                    }
                   </TableRow>
                 );
               })}

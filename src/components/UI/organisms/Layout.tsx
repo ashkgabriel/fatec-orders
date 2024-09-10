@@ -87,10 +87,9 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 interface LayoutProps {
   children: React.ReactNode;
-  name: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ name, children }) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
