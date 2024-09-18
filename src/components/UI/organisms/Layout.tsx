@@ -23,6 +23,7 @@ import CustomListItem from "../molecules/CustomListItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HomeIcon from "@mui/icons-material/Home";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import RequestPageIcon from "@mui/icons-material/RequestPage";
 
 const drawerWidth = 240;
 
@@ -153,6 +154,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <List>
           <CustomListItem text="Início" path="/home" icon={<HomeIcon/>}/>
           <CustomListItem text="Produtos" path="/products" icon={<ShoppingBasketIcon/>}/>
+          <CustomListItem text="Pedidos" path="/orders" icon={<RequestPageIcon/>}/>
           <CustomListItem text="Sair" path="/" icon={<LogoutIcon/>}/>
         </List>
         <Divider />
