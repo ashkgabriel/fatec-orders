@@ -15,9 +15,11 @@
     "@mui/material": "^6.1.0",
     "axios": "^1.7.7",
     "fatec-orders": "file:",
-    "next": "14.2.12",
+    "formik": "^2.4.6",
+    "next": "14.2.13",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^22.5.5",

@@ -14,6 +14,8 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { visuallyHidden } from "@mui/utils";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 
 /* TableBody > TableRow */
@@ -149,7 +151,12 @@ export default function CustomTable({ rows, headCells }: CustomTableProps) {
   };
 
   /* TableBody > TableRow */
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+  const handleClick = (event: React.MouseEvent<unknown>, id: number, router: AppRouterInstance) => {
+
+    router.push(`/products/edit/${id}`)
+    
+    console.log(`Id: ${id}`);
+    
     const selectedIndex = selected.indexOf(id);
     let newSelected: readonly number[] = [];
 
@@ -200,6 +207,8 @@ export default function CustomTable({ rows, headCells }: CustomTableProps) {
     [order, orderBy, page, rowsPerPage, rows]
   );
 
+  const router = useRouter();
+  
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -226,7 +235,7 @@ export default function CustomTable({ rows, headCells }: CustomTableProps) {
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    onClick={(event) => handleClick(event, row.id, router)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
