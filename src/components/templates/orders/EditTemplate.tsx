@@ -27,15 +27,7 @@ const EditTemplate: React.FC = () => {
   return (
     <Layout>
       <Box component="form" onSubmit={handleSubmit}>
-        <TextField
-          onChange={handleChange}
-          error={!!errors.id}
-          helperText={errors.id}
-          value={values.id}
-          name="id"
-          label="ID"
-          fullWidth
-        />
+        
         <TextField
           onChange={handleChange}
           error={!!errors.date}
