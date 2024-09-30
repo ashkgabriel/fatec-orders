@@ -26,16 +26,8 @@ const EditTemplate: React.FC = () => {
 
   return (
     <Layout>
-      <Box component="form" onSubmit={handleSubmit}>
-        <TextField
-          onChange={handleChange}
-          error={!!errors.id}
-          helperText={errors.id}
-          value={values.id}
-          name="id"
-          label="ID"
-          fullWidth
-        />
+      <Box component="form" onSubmit={handleSubmit} className="flex-1 gap-2">
+        
         <TextField
           onChange={handleChange}
           error={!!errors.date}

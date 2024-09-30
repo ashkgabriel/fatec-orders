@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import React from "react";
 import Layout from "@/components/UI/organisms/Layout";
-import EditTemplate from "@/components/templates/products/EditTemplate";
+import EditTemplate from "@/components/templates/orders/EditTemplate";
 
 interface PedidosEditProps {
   params: { slug: string };

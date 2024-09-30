@@ -2,10 +2,7 @@ import * as Yup from "yup"
 
 export const OrderEditValidator = () => {
     return Yup.object().shape({
-        id: Yup.number()
-            .required("Campo obrigatório.")
-            .integer("Deve ser um número inteiro.")
-            .min(0),
+        
         date: Yup.string()
             .required("Campo obrigatório.")
             .min(10, "Campo deve ter ${min} caracteres.")

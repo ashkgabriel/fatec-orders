@@ -66,7 +66,7 @@ const Pedidos = () => {
   return (
     <Layout>
       <Box>
-        <CustomTable rows={rows} headCells={headCells} />
+        <CustomTable pageType="orders" rows={rows} headCells={headCells} />
       </Box>
     </Layout>
   );
