@@ -1,6 +1,7 @@
 import { TextField } from "@mui/material";
 import React from "react";
 import Layout from "@/components/UI/organisms/Layout";
+import EditTemplate from "@/components/templates/products/EditTemplate";
 
 interface PedidosEditProps {
   params: { slug: string };
@@ -8,9 +9,7 @@ interface PedidosEditProps {
 
 const PedidosEdit: React.FC<PedidosEditProps> = ({ params }) => {
   return (
-    <Layout>
-      <TextField name="description" label="Descrição" fullWidth />
-    </Layout>
+    <EditTemplate/>
   );
 };
 

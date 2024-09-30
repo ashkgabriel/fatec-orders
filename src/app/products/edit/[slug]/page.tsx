@@ -1,5 +1,5 @@
 "use client";
-import EditTemplate from "@/components/templates/products/EditTemplate";
+import EditTemplate from "@/components/templates/orders/EditTemplate";
 import React from "react";
 
 interface ProductEditProps {

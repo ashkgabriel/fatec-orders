@@ -16,7 +16,7 @@ const EditTemplate: React.FC = () => {
       flavor: "",
     },
     validationSchema: ProductEditValidator,
-    onSubmit: (values) => {
+    onSubmit: (values: any) => {
       console.log(values);
     },
   });
