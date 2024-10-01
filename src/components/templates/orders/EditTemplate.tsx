@@ -26,6 +26,8 @@ const EditTemplate: React.FC = () => {
 
   return (
     <Layout>
+      <Box component="form" onSubmit={handleSubmit}>
+        
       <Box component="form" onSubmit={handleSubmit} className="flex-1 gap-2">
         
         <TextField
