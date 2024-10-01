@@ -11,10 +11,10 @@ export const ProductEditValidator = () => {
       .max(80, "Campo deve ter no máximo ${max} caracteres."),
     value: Yup.number()
       .required("Campo obrigatório")
-      .min(0.01, "Campo deve ter ao menos ${min} caracteres."),
+      .min(0.01, "Campo deve ter ao menos ${min}."),
     weight: Yup.number().min(
       0.01,
-      "Campo deve ter ao menos ${min} caracteres."
+      "Campo deve ter ao menos ${min}."
     ),
     flavor: Yup.string(),
   });
