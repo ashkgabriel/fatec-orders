@@ -1,20 +1,58 @@
 "use client";
 import Layout from "@/components/UI/organisms/Layout";
+import { env } from "@/config/env";
 import { IProduct } from "@/interfaces/IProduct";
 import { ProductEditValidator } from "@/validators/ProductEditValidator";
 import { Box, Button, MenuItem, Select, TextField } from "@mui/material";
+import axios from "axios";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const EditTemplate: React.FC = () => {
+const EditTemplate: React.FC<{ productId: number }> = ({ productId }) => {
+  const [loading, setLoading] = useState(true);
+  const [initialValues, setInitialValues] = useState<IProduct>({
+    description: "",
+    brand: "",
+    value: 0,
+    weight: 0,
+    flavor: "",
+  });
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${env.apiBaseUrl}/produto`);
+        console.log("Dados da API:", response.data);
+
+        // Acessa o array dentro da chave 'produtos'
+        const products = response.data.produtos;
+
+        // Filtra o produto pelo ID
+        const product = products.find((p: any) => p.id === productId);
+        if (product) {
+          setInitialValues({
+            description: product.descricao,
+            brand: product.marca,
+            value: product.valor,
+            weight: product.peso_gramas,
+            flavor: product.sabor || "",
+          });
+        } else {
+          console.error("Produto não encontrado");
+        }
+      } catch (error) {
+        console.error("Erro ao buscar produtos", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [productId]);
+
   const formik = useFormik<IProduct>({
-    initialValues: {
-      description: "",
-      brand: "",
-      value: 0,
-      weight: 0,
-      flavor: "",
-    },
+    initialValues: initialValues,
+    enableReinitialize: true, // Permite que Formik re-renderize quando initialValues mudar
     validationSchema: ProductEditValidator,
     onSubmit: (values: any) => {
       console.log(values);
@@ -22,6 +60,10 @@ const EditTemplate: React.FC = () => {
   });
 
   const { handleSubmit, values, handleChange, setFieldValue, errors } = formik;
+
+  if (loading) {
+    return <p>Carregando...</p>;
+  }
 
   return (
     <Layout>
