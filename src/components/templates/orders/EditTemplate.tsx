@@ -1,12 +1,17 @@
 "use client";
+import { withDataFetching } from "@/components/HOC/withDataFetching";
 import Layout from "@/components/UI/organisms/Layout";
 import { IOrder } from "@/interfaces/IOrder";
 import { OrderEditValidator } from "@/validators/OrderEditValidator";
 import { Box, Button, TextField } from "@mui/material";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 
-const EditTemplate: React.FC = () => {
+interface EditTemplateProps {
+  order?: IOrder;
+}
+
+const EditTemplate: React.FC<EditTemplateProps> = ({ order }) => {
   const formik = useFormik<IOrder>({
     initialValues: {
       id: 0,
@@ -22,70 +27,81 @@ const EditTemplate: React.FC = () => {
     },
   });
 
-  const { handleSubmit, values, handleChange, setFieldValue, errors } = formik;
+  const {
+    handleSubmit,
+    values,
+    handleChange,
+    setFieldValue,
+    errors,
+    setValues,
+  } = formik;
+
+  useEffect(() => {
+    if (!order) return;
+
+    const { id, ...orderData } = order;
+    setValues(orderData);
+  }, [order, setValues]);
 
   return (
     <Layout>
-      <Box component="form" onSubmit={handleSubmit}>
-        
-      <Box component="form" onSubmit={handleSubmit} className="flex-1 gap-2">
-        
-        <TextField
-          onChange={handleChange}
-          error={!!errors.date}
-          helperText={errors.date}
-          value={values.date}
-          name="date"
-          type="date"
-          label="Data"
-          fullWidth
-        />
-        <TextField
-          onChange={handleChange}
-          error={!!errors.client_id}
-          helperText={errors.client_id}
-          value={values.client_id}
-          name="client_id"
-          label="ID do cliente"
-          fullWidth
-        />
-        <TextField
-          onChange={handleChange}
-          error={!!errors.payment_method}
-          helperText={errors.payment_method}
-          value={values.payment_method}
-          name="payment_method"
-          label="Método de pagamento"
-          fullWidth
-        />
-        
-        <TextField
-          onChange={handleChange}
-          error={!!errors.quantity}
-          helperText={errors.quantity}
-          value={values.quantity}
-          name="quantity"
-          label="Quantidade"
-          fullWidth
-        />
-        
-        <TextField
-          onChange={handleChange}
-          error={!!errors.total}
-          helperText={errors.total}
-          value={values.total}
-          name="total"
-          label="Total"
-          fullWidth
-        />
+        <Box component="form" onSubmit={handleSubmit} className="flex-1 gap-2">
+          <TextField
+            onChange={handleChange}
+            error={!!errors.date}
+            helperText={errors.date}
+            value={values.date}
+            name="date"
+            type="date"
+            label="Data"
+            fullWidth
+          />
+          <TextField
+            onChange={handleChange}
+            error={!!errors.client_id}
+            helperText={errors.client_id}
+            value={values.client_id}
+            name="client_id"
+            label="ID do cliente"
+            fullWidth
+          />
+          <TextField
+            onChange={handleChange}
+            error={!!errors.payment_method}
+            helperText={errors.payment_method}
+            value={values.payment_method}
+            name="payment_method"
+            label="Método de pagamento"
+            fullWidth
+          />
 
-        <Button variant="outlined" color="secondary">
-          Cancelar
-        </Button>
-        <Button variant="contained" color="primary" type="submit">
-          Atualizar
-        </Button>
-      </Box>
+          <TextField
+            onChange={handleChange}
+            error={!!errors.quantity}
+            helperText={errors.quantity}
+            value={values.quantity}
+            name="quantity"
+            label="Quantidade"
+            fullWidth
+          />
+
+          <TextField
+            onChange={handleChange}
+            error={!!errors.total}
+            helperText={errors.total}
+            value={values.total}
+            name="total"
+            label="Total"
+            fullWidth
+          />
+
+          <Button variant="outlined" color="secondary">
+            Cancelar
+          </Button>
+          <Button variant="contained" color="primary" type="submit">
+            Atualizar
+          </Button>
+        </Box>
     </Layout>
   );
 };

@@ -1,4 +1,5 @@
 "use client";
+import { withDataFetching } from "@/components/HOC/withDataFetching";
 import Layout from "@/components/UI/organisms/Layout";
 import { IProduct } from "@/interfaces/IProduct";
 import { ProductEditValidator } from "@/validators/ProductEditValidator";
