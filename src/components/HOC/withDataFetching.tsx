@@ -34,7 +34,7 @@ export const withDataFetching = (url: string) => (WrappedComponent: any) => {
     return (
       <>
         {error ? (
-          <Alert severity="error" variant="filled" sx={{ marginTop: "100px"}}>
+          <Alert severity="error" variant="filled" sx={{ marginTop: "80px"}}>
             <AlertTitle>Erro</AlertTitle>
             {error}
           </Alert>

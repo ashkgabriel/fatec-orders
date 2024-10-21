@@ -18,8 +18,6 @@ const PedidosEdit: React.FC<PedidosEditProps> = ({ params, data }) => {
       console.error("Dados da API não carregados.");
       return;
     }
-    console.log("Dados recebidos:", data); // Verifique se os dados estão corretos
-
     const { pedido } = data;
     if (!pedido) {
       console.error("Pedido não encontrado nos dados recebidos.");
@@ -45,7 +43,7 @@ const PedidosEdit: React.FC<PedidosEditProps> = ({ params, data }) => {
     });
   }, [data]);
 
-  return <EditTemplate order={order}/>;
+  return <EditTemplate order={order} />;
 };
 
 export default withDataFetching(`${env.apiBaseUrl}/pedidos`)(PedidosEdit);
