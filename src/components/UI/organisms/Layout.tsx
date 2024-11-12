@@ -19,6 +19,7 @@ import Typography from "@mui/material/Typography";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import CustomListItem from "../molecules/CustomListItem";
+import { useAuth } from "@/context/AuthContext";
 
 const drawerWidth = 240;
 
@@ -97,10 +98,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setOpen(false);
   };
 
-  const router = useRouter();
+  const { logout } = useAuth()
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex"}}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -158,11 +159,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             path="/orders"
             icon={<RequestPageIcon />}
           />
-          <CustomListItem text="Sair" path="/" icon={<LogoutIcon />} />
+          <CustomListItem text="Sair" beforeRedirect={() => {
+            logout();
+          }} path="/" icon={<LogoutIcon />} />
         </List>
         <Divider />
       </Drawer>
-      <Main open={open}>{children}</Main>
+      <Main style={{marginTop: 80}} open={open}>{children}</Main>
     </Box>
   );
 };
