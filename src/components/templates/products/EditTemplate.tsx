@@ -1,4 +1,5 @@
 "use client";
+import { withDataFetching } from "@/components/HOC/withDataFetching";
 import Layout from "@/components/UI/organisms/Layout";
 import { env } from "@/config/env";
 import { IProduct } from "@/interfaces/IProduct";
@@ -6,64 +7,35 @@ import { ProductEditValidator } from "@/validators/ProductEditValidator";
 import { Box, Button, MenuItem, Select, TextField } from "@mui/material";
 import axios from "axios";
 import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
-const EditTemplate: React.FC<{ productId: number }> = ({ productId }) => {
-  const [loading, setLoading] = useState(true);
-  const [initialValues, setInitialValues] = useState<IProduct>({
-    description: "",
-    brand: "",
-    value: 0,
-    weight: 0,
-    flavor: "",
-  });
+interface EditTemplateProps {
+  product?: IProduct;
+}
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(`${env.apiBaseUrl}/produto`);
-        console.log("Dados da API:", response.data);
-
-        // Acessa o array dentro da chave 'produtos'
-        const products = response.data.produtos;
-
-        // Filtra o produto pelo ID
-        const product = products.find((p: any) => p.id === productId);
-        if (product) {
-          setInitialValues({
-            description: product.descricao,
-            brand: product.marca,
-            value: product.valor,
-            weight: product.peso_gramas,
-            flavor: product.sabor || "",
-          });
-        } else {
-          console.error("Produto não encontrado");
-        }
-      } catch (error) {
-        console.error("Erro ao buscar produtos", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [productId]);
-
+const EditTemplate: React.FC<EditTemplateProps> = ({ product }) => {
   const formik = useFormik<IProduct>({
-    initialValues: initialValues,
-    enableReinitialize: true, // Permite que Formik re-renderize quando initialValues mudar
+    initialValues: {
+      description: "",
+      brand: "",
+      value: 0,
+      weight: 0,
+      flavor: "",
+    },
     validationSchema: ProductEditValidator,
     onSubmit: (values: any) => {
       console.log(values);
     },
   });
 
-  const { handleSubmit, values, handleChange, setFieldValue, errors } = formik;
+  const { handleSubmit, values, handleChange, setFieldValue, errors, setValues } = formik;
 
-  if (loading) {
-    return <p>Carregando...</p>;
-  }
+  useEffect(() => {
+    if(!product) return;
+    
+    const {id, ...prod} = product
+    setValues(prod)
+  },[product, setValues])
 
   return (
     <Layout>
@@ -112,9 +84,9 @@ const EditTemplate: React.FC<{ productId: number }> = ({ productId }) => {
           onChange={(e) => setFieldValue("flavor", e.target.value)}
         >
           <MenuItem value=""> --Não Informado-- </MenuItem>
-          <MenuItem value="morango">Morango</MenuItem>
-          <MenuItem value="chocolate">Chocolate</MenuItem>
-          <MenuItem value="abacaxi">Abacaxi</MenuItem>
+          <MenuItem value="Morango">Morango</MenuItem>
+          <MenuItem value="Chocolate">Chocolate</MenuItem>
+          <MenuItem value="Abacaxi">Abacaxi</MenuItem>
         </Select>
 
         <Button variant="outlined" color="secondary">

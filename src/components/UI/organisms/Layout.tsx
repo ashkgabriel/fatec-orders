@@ -1,9 +1,11 @@
 "use client";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import MailIcon from "@mui/icons-material/Mail";
+import HomeIcon from "@mui/icons-material/Home";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
+import RequestPageIcon from "@mui/icons-material/RequestPage";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,19 +13,13 @@ import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import CustomListItem from "../molecules/CustomListItem";
-import LogoutIcon from "@mui/icons-material/Logout";
-import HomeIcon from "@mui/icons-material/Home";
-import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
-import RequestPageIcon from "@mui/icons-material/RequestPage";
+import { useAuth } from "@/context/AuthContext";
 
 const drawerWidth = 240;
 
@@ -102,10 +98,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setOpen(false);
   };
 
-  const router = useRouter();
+  const { logout } = useAuth()
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex"}}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -152,18 +148,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </DrawerHeader>
         <Divider />
         <List>
-          <CustomListItem text="Início" path="/home" icon={<HomeIcon/>}/>
-          <CustomListItem text="Produtos" path="/products" icon={<ShoppingBasketIcon/>}/>
-          <CustomListItem text="Pedidos" path="/orders" icon={<RequestPageIcon/>}/>
-          <CustomListItem text="Sair" path="/" icon={<LogoutIcon/>}/>
+          <CustomListItem text="Início" path="/home" icon={<HomeIcon />} />
+          <CustomListItem
+            text="Produtos"
+            path="/products"
+            icon={<ShoppingBasketIcon />}
+          />
+          <CustomListItem
+            text="Pedidos"
+            path="/orders"
+            icon={<RequestPageIcon />}
+          />
+          <CustomListItem text="Sair" beforeRedirect={() => {
+            logout();
+          }} path="/" icon={<LogoutIcon />} />
         </List>
         <Divider />
-        
       </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-        {children}
-      </Main>
+      <Main style={{marginTop: 80}} open={open}>{children}</Main>
     </Box>
   );
 };
