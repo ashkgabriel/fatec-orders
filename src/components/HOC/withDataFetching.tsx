@@ -20,6 +20,7 @@ export const withDataFetching = (url: string) => (WrappedComponent: any) => {
         const id = props.params?.slug ? `/${props.params?.slug}` : "";
 
         try {
+          console.log(`Teste ${url}${id}`);
           const response = await axios.get(`${url}${id}`);
           setData(response.data);
         } catch (_error) {
